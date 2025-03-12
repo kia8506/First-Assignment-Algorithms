@@ -1,5 +1,5 @@
 public class Exercises {
-    
+
     public int[] productIndices(int[] values, int target) {
         for (int i = 0; i < values.length; i++) {
             for (int j = i + 1; j < values.length; j++) {
@@ -79,32 +79,26 @@ public class Exercises {
     public static void main(String[] args) {
         Exercises exercises = new Exercises();
 
-        // Test productIndices
         int[] productResult = exercises.productIndices(new int[]{1, 2, 3, 4}, 8);
-        System.out.println("Product Indices: {" + productResult[0] + ", " + productResult[1] + "}");
+        System.out.println(productResult[0] + ", " + productResult[1]);
 
-        // Test spiralTraversal
-        int[][] matrix = {
+        int[][] mat = {
             {1, 2, 3},
             {4, 5, 6},
             {7, 8, 9}
         };
-        int[] spiralResult = exercises.spiralTraversal(matrix, 3, 3);
-        System.out.print("Spiral Traversal: {");
-        for (int i = 0; i < spiralResult.length; i++) {
-            System.out.print(spiralResult[i] + (i < spiralResult.length - 1 ? ", " : ""));
+        int[] spiral_res = exercises.spiralTraversal(mat, 3, 3);
+        for (int i = 0; i < spiral_res.length; i++) {
+            System.out.print(spiral_res[i] + (i < spiral_res.length - 1 ? ", " : ""));
         }
-        System.out.println("}");
 
-        // Test intPartitions
         int[][] partitions = exercises.intPartitions(4);
-        System.out.println("Integer Partitions of 4:");
         for (int i = 0; i < partitions.length; i++) {
             System.out.print("{");
             for (int j = 0; j < partitions[i].length; j++) {
                 System.out.print(partitions[i][j] + (j < partitions[i].length - 1 ? ", " : ""));
             }
-            System.out.println("}");
+            System.out.print("}\n");
         }
     }
 }
