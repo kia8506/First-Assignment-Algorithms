@@ -1,64 +1,110 @@
 public class Exercises {
-
-    /*
-        there is an array of positive integers as input of function and another integer for the target value
-        all the algorithm should do is to find those two integers in array which their multiplication is the target
-        then it should return an array of their indices
-        e.g. {1, 2, 3, 4} with target of 8 -> {1, 3}
-
-        note: you should return the indices in ascending order and every array's solution is unique
-    */
+    
     public int[] productIndices(int[] values, int target) {
-        // todo
-        return null;
+        for (int i = 0; i < values.length; i++) {
+            for (int j = i + 1; j < values.length; j++) {
+                if (values[i] * values[j] == target) {
+                    return new int[]{i, j}; // i < j, So it is already in ascending order
+                }
+            }
+        }
+        return new int[]{-1, -1};
     }
 
-    /*
-        given a matrix of random integers, you should do spiral traversal in it
-        e.g. if the matrix is as shown below:
-        1 2 3
-        4 5 6
-        7 8 9
-        then the spiral traversal of that is:
-        {1, 2, 3, 6, 9, 8, 7, 4, 5}
-
-        so you should walk in that matrix in a curl and then add the numbers in order you've seen them in a 1D array
-    */
     public int[] spiralTraversal(int[][] values, int rows, int cols) {
-        // todo
-        return null;
+        int[] res = new int[rows * cols];
+        int index = 0;
+        int top = 0, bottom = rows - 1, left = 0, right = cols - 1;
+
+        while (top <= bottom && left <= right) {
+            for (int i = left; i <= right; i++)
+                res[index++] = values[top][i]; // right
+            top++;
+            for (int i = top; i <= bottom; i++)
+                res[index++] = values[i][right]; // down
+            right--;
+            if (top <= bottom) {
+                for (int i = right; i >= left; i--)
+                    res[index++] = values[bottom][i]; // left
+                bottom--;
+            }
+            if (left <= right) {
+                for (int i = bottom; i >= top; i--)
+                    res[index++] = values[i][left]; // up
+                left++;
+            }
+        }
+
+        return res;
     }
 
-    /*
-        integer partitioning is a combinatorics problem in discreet maths
-        the problem is to generate sum numbers which their summation is the input number
-
-        e.g. 1 -> all partitions of integer 3 are:
-        3
-        2, 1
-        1, 1, 1
-
-        e.g. 2 -> for number 4 goes as:
-        4
-        3, 1
-        2, 2
-        2, 1, 1
-        1, 1, 1, 1
-
-        note: as you can see in examples, we want to generate distinct summations, which means 1, 2 and 2, 1 are no different
-        you should generate all partitions of the input number and
-
-        hint: you can measure the size and order of arrays by finding the pattern of partitions and their number
-        trust me, that one's fun and easy :)
-
-        if you're familiar with lists and arraylists, you can also edit method's body to use them instead of array
-    */
     public int[][] intPartitions(int n) {
-        // todo
-        return null;
+        int max_partitions = countPartitions(n, n);
+        int[][] res = new int[max_partitions][];
+        int count = 0;
+        int[] current = new int[n];
+
+        generatePartitions(n, n, 0, res, current, count);
+        return res;
+    }
+
+    // Private function to calculate the maximum possible number of partitions
+    private int countPartitions(int n, int max) {
+        if (n == 0)
+            return 1;
+        int count = 0;
+        for (int i = Math.min(n, max); i >= 1; i--) {
+            count += countPartitions(n - i, i);
+        }
+        return count;
+    }
+
+    // Private function to genarate all possible partitions
+    private int generatePartitions(int n, int max, int index, int[][] res, int[] current, int count) {
+        if (n == 0) {
+            int[] partition = new int[index];
+            for (int i = 0; i < index; i++) {
+                partition[i] = current[i];
+            }
+            res[count] = partition;
+            return count + 1;
+        }
+        for (int i = Math.min(n, max); i >= 1; i--) {
+            current[index] = i;
+            count = generatePartitions(n - i, i, index + 1, res, current, count);
+        }
+        return count;
     }
 
     public static void main(String[] args) {
-        // you can test your code here
+        Exercises exercises = new Exercises();
+
+        // Test productIndices
+        int[] productResult = exercises.productIndices(new int[]{1, 2, 3, 4}, 8);
+        System.out.println("Product Indices: {" + productResult[0] + ", " + productResult[1] + "}");
+
+        // Test spiralTraversal
+        int[][] matrix = {
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9}
+        };
+        int[] spiralResult = exercises.spiralTraversal(matrix, 3, 3);
+        System.out.print("Spiral Traversal: {");
+        for (int i = 0; i < spiralResult.length; i++) {
+            System.out.print(spiralResult[i] + (i < spiralResult.length - 1 ? ", " : ""));
+        }
+        System.out.println("}");
+
+        // Test intPartitions
+        int[][] partitions = exercises.intPartitions(4);
+        System.out.println("Integer Partitions of 4:");
+        for (int i = 0; i < partitions.length; i++) {
+            System.out.print("{");
+            for (int j = 0; j < partitions[i].length; j++) {
+                System.out.print(partitions[i][j] + (j < partitions[i].length - 1 ? ", " : ""));
+            }
+            System.out.println("}");
+        }
     }
 }
